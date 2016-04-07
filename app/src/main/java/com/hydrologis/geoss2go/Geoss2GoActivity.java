@@ -1,24 +1,38 @@
 package com.hydrologis.geoss2go;
 
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hydrologis.geoss2go.core.Profile;
+import com.hydrologis.geoss2go.core.ProfilesHandler;
 import com.hydrologis.geoss2go.dialogs.NewProfileDialogFragment;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDialogFragment.INewProfileCreatedListener {
 
     private LinearLayout profilesContainer;
+    private LinearLayout emptyFiller;
+    private SharedPreferences mPeferences;
+
+    private List<Profile> profileList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +50,17 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
         }
 
         profilesContainer = (LinearLayout) findViewById(R.id.profiles_container);
+        emptyFiller = (LinearLayout) findViewById(R.id.empty_fillers);
+
+        mPeferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        try {
+            profileList = ProfilesHandler.INSTANCE.getProfilesFromPreferences(mPeferences);
+        } catch (JSONException e) {
+            Log.e("GEOS2GO", "", e);
+        }
+
+        loadProfiles();
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
@@ -46,6 +71,24 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
                 newProfileDialogFragment.show(getSupportFragmentManager(), "New Profile Dialog");
             }
         });
+    }
+
+    private void loadProfiles() {
+        profilesContainer.removeAllViews();
+
+        if (profileList.size() != 0)
+            emptyFiller.setVisibility(View.GONE);
+
+        for (Profile profile : profileList) {
+            View newProjectDialogView = getLayoutInflater().inflate(R.layout.profile_cardlayout, null);
+            TextView profileNameText = (TextView) newProjectDialogView.findViewById(R.id.profileNameText);
+            profileNameText.setText(profile.name);
+            TextView profileDescriptionText = (TextView) newProjectDialogView.findViewById(R.id.profileDescriptionText);
+            profileDescriptionText.setText(profile.description);
+
+            profilesContainer.addView(newProjectDialogView);
+        }
+
     }
 
     @Override
@@ -71,12 +114,10 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
 
     @Override
     public void onNewProfileCreated(String name, String description) {
-        View newProjectDialogView = getLayoutInflater().inflate(R.layout.profile_cardlayout, null);
-        TextView profileNameText = (TextView) newProjectDialogView.findViewById(R.id.profileNameText);
-        profileNameText.setText(name);
-        TextView profileDescriptionText = (TextView) newProjectDialogView.findViewById(R.id.profileDescriptionText);
-        profileDescriptionText.setText(description);
-
-        profilesContainer.addView(newProjectDialogView);
+        Profile p = new Profile();
+        p.name = name;
+        p.description = description;
+        profileList.add(p);
+        loadProfiles();
     }
 }

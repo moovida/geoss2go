@@ -9,25 +9,40 @@
     tools:showIn="@layout/activity_geoss2_go">
 
     <LinearLayout
-        android:id="@+id/profiles_container"
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+            android:id="@+id/empty_fillers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/license_text_on_empty"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/text_margin"
-            android:text="@string/license_text" />
 
-        <ImageView
-            android:id="@+id/logosView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:src="@drawable/ic_logos2add" />
+            <TextView
+                android:id="@+id/license_text_on_empty"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/text_margin"
+                android:text="@string/license_text" />
+
+            <ImageView
+                android:id="@+id/logosView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:src="@drawable/ic_logos2add" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/profiles_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+        </LinearLayout>
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>
