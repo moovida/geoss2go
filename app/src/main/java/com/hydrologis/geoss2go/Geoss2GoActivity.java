@@ -11,8 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-public class Geoss2GoActivity extends AppCompatActivity {
+import com.hydrologis.geoss2go.dialogs.NewProfileDialogFragment;
+
+public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDialogFragment.INewProfileCreatedListener {
+
+    private LinearLayout profilesContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,12 +36,15 @@ public class Geoss2GoActivity extends AppCompatActivity {
 //        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.rgb(0, 0, 0));
         }
 
+        profilesContainer = (LinearLayout) findViewById(R.id.profiles_container);
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                NewProfileDialogFragment newProfileDialogFragment = NewProfileDialogFragment.newInstance(null, null);
+                newProfileDialogFragment.show(getSupportFragmentManager(), "New Profile Dialog");
             }
         });
     }
@@ -59,5 +68,16 @@ public class Geoss2GoActivity extends AppCompatActivity {
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onNewProfileCreated(String name, String description) {
+        View newProjectDialogView = getLayoutInflater().inflate(R.layout.profile_cardlayout, null);
+        TextView profileNameText = (TextView) newProjectDialogView.findViewById(R.id.profileNameText);
+        profileNameText.setText(name);
+        TextView profileDescriptionText = (TextView) newProjectDialogView.findViewById(R.id.profileDescriptionText);
+        profileDescriptionText.setText(description);
+
+        profilesContainer.addView(newProjectDialogView);
     }
 }
