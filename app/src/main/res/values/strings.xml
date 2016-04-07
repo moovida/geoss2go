@@ -3,11 +3,14 @@
     <string name="license_text">
         "Geoss2Go.\n\n"
 
-        "Geoss2Go has been funded by the European Commission.\n"
-        "Blah blah... \n"
-        "Blah blah... \n\n"
-        "Blah blah... \n"
-        "Blah blah... \n\n"
+        "Acknowledgement: This application has been developed within the"
+        "MyGEOSS project, which has received funding from the European"
+        "Union’s Horizon 2020 research and innovation programme.\n\n\n"
+
+        "To unleash the power of this app you need to install also"
+        "the digital field mapping app Geopaparazzi. If not already"
+        "installed at startup you will be aided through the installation"
+        "process.\n\n\n"
 
         "To create a new profile simply push the plus button on the upper right corner.\n\n"
     </string>

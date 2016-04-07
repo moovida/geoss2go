@@ -28,12 +28,11 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
         setSupportActionBar(toolbar);
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.toolbar_layout);
+        assert collapsingToolbarLayout != null;
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
             collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.TransparentText);
         } else {
-//        collapsingToolbarLayout.setTitle("Create Delivery Personnel");
             collapsingToolbarLayout.setExpandedTitleColor(Color.argb(0, 0, 0, 0));
-//        collapsingToolbarLayout.setCollapsedTitleTextColor(Color.rgb(0, 0, 0));
         }
 
         profilesContainer = (LinearLayout) findViewById(R.id.profiles_container);
