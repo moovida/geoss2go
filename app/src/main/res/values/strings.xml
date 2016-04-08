@@ -18,4 +18,6 @@
     <string name="action_import">Import Profiles</string>
     <string name="action_export">Export profiles</string>
     <string name="action_delete">Delete all Profiles</string>
+    <string name="title_activity_profile_settings">Profile Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

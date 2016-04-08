@@ -1,9 +1,11 @@
 package com.hydrologis.geoss2go;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hydrologis.geoss2go.activities.ProfileSettingsActivity;
 import com.hydrologis.geoss2go.core.Profile;
 import com.hydrologis.geoss2go.core.ProfilesHandler;
 import com.hydrologis.geoss2go.dialogs.NewProfileDialogFragment;
@@ -43,6 +46,7 @@ import eu.geopaparazzi.library.util.GPDialogs;
 public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDialogFragment.INewProfileCreatedListener, ColorStrokeDialogFragment.IColorStrokePropertiesChangeListener {
 
     public static final String PROFILES_CONFIG_JSON = "profiles_config.json";
+    public static final String KEY_SELECTED_PROFILE = "KEY_SELECTED_PROFILE";
     private LinearLayout profilesContainer;
     private LinearLayout emptyFiller;
     private SharedPreferences mPeferences;
@@ -149,7 +153,9 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
             settingsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Intent preferencesIntent = new Intent(Geoss2GoActivity.this, ProfileSettingsActivity.class);
+                    preferencesIntent.putExtra(KEY_SELECTED_PROFILE, profile);
+                    startActivity(preferencesIntent);
                 }
             });
             ImageButton deleteButton = (ImageButton) newProjectCardView.findViewById(R.id.deleteButton);
