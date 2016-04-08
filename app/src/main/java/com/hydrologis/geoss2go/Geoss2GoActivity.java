@@ -7,15 +7,16 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -29,13 +30,19 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDialogFragment.INewProfileCreatedListener {
+import eu.geopaparazzi.library.core.dialogs.ColorStrokeDialogFragment;
+import eu.geopaparazzi.library.style.ColorStrokeObject;
+import eu.geopaparazzi.library.style.ColorUtilities;
+
+public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDialogFragment.INewProfileCreatedListener, ColorStrokeDialogFragment.IColorStrokePropertiesChangeListener {
 
     private LinearLayout profilesContainer;
     private LinearLayout emptyFiller;
     private SharedPreferences mPeferences;
 
     private List<Profile> profileList = new ArrayList<>();
+    private CardView currentColorCardView;
+    private Profile currentProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,16 +105,50 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
         if (profileList.size() != 0)
             emptyFiller.setVisibility(View.GONE);
 
-        for (Profile profile : profileList) {
-            View newProjectDialogView = getLayoutInflater().inflate(R.layout.profile_cardlayout, null);
-            TextView profileNameText = (TextView) newProjectDialogView.findViewById(R.id.profileNameText);
+        for (final Profile profile : profileList) {
+            final CardView newProjectCardView = (CardView) getLayoutInflater().inflate(R.layout.profile_cardlayout, null);
+            TextView profileNameText = (TextView) newProjectCardView.findViewById(R.id.profileNameText);
             profileNameText.setText(profile.name);
-            TextView profileDescriptionText = (TextView) newProjectDialogView.findViewById(R.id.profileDescriptionText);
+            TextView profileDescriptionText = (TextView) newProjectCardView.findViewById(R.id.profileDescriptionText);
             profileDescriptionText.setText(profile.description);
 
-            profilesContainer.addView(newProjectDialogView);
+            ImageButton settingsButton = (ImageButton) newProjectCardView.findViewById(R.id.settingsButton);
+            settingsButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            ImageButton colorButton = (ImageButton) newProjectCardView.findViewById(R.id.colorButton);
+            colorButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    currentColorCardView = newProjectCardView;
+                    currentProfile = profile;
+                    int color = ColorUtilities.toColor(profile.color);
+                    ColorStrokeObject colorStrokeObject = new ColorStrokeObject();
+                    colorStrokeObject.hasFill = true;
+                    colorStrokeObject.hasStroke = false;
+                    colorStrokeObject.fillColor = color;
+
+                    ColorStrokeDialogFragment colorStrokeDialogFragment = ColorStrokeDialogFragment.newInstance(colorStrokeObject);
+                    colorStrokeDialogFragment.show(getSupportFragmentManager(), "Color Dialog");
+                }
+            });
+
+            String color = profile.color;
+            setCardviewColor(newProjectCardView, color);
+//            newProjectCardView.setBackgroundColor(backgroundColor);
+
+            profilesContainer.addView(newProjectCardView);
         }
 
+    }
+
+    private void setCardviewColor(CardView newProjectCardView, String color) {
+        int backgroundColor = ColorUtilities.toColor(color);
+        newProjectCardView.setCardBackgroundColor(backgroundColor);
     }
 
     @Override
@@ -139,5 +180,21 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
         p.creationdate = new Date().toString();
         profileList.add(p);
         loadProfiles();
+    }
+
+    @Override
+    public void onPropertiesChanged(ColorStrokeObject newColorStrokeObject) {
+        if (newColorStrokeObject != null && newColorStrokeObject.hasFill && currentColorCardView != null && currentProfile != null) {
+            String newColor = ColorUtilities.getHex(newColorStrokeObject.fillColor);
+            currentProfile.color = newColor;
+            setCardviewColor(currentColorCardView, newColor);
+
+            // and save it to disk
+            try {
+                ProfilesHandler.INSTANCE.saveProfilesToPreferences(mPeferences, profileList);
+            } catch (JSONException e) {
+                Log.e("GEOS2GO", "Error saving profiles", e);
+            }
+        }
     }
 }

@@ -1,1 +1,3 @@
 include ':app'
+include ':geopaparazzispatialitelibrary'
+project(':geopaparazzispatialitelibrary').projectDir=new File('../geopaparazzi6-git/geopaparazzilibrary/')

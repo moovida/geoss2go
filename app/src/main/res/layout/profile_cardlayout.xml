@@ -43,7 +43,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
             android:layout_marginBottom="10dip"
-            android:background="@drawable/ic_settings_24dp" />
+            android:background="@drawable/ic_settings_primary_24dp" />
 
         <ImageButton
             android:id="@+id/colorButton"
@@ -51,7 +51,7 @@
             android:layout_height="@dimen/min_touch_size"
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/settingsButton"
-            android:background="@drawable/ic_palette_24dp" />
+            android:background="@drawable/ic_palette_primary_24dp" />
 
     </RelativeLayout>
 
