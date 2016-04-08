@@ -41,6 +41,20 @@ public enum ProfilesHandler {
     }
 
     /**
+     * Save the list of profiles to preferences.
+     *
+     * @param preferences the preferences object.
+     * @return the list of Profile objects.
+     * @throws JSONException
+     */
+    public void saveProfilesToPreferences(SharedPreferences preferences, List<Profile> profilesList) throws JSONException {
+        String jsonProfilesString = getJsonFromProfilesList(profilesList, false);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString(KEY_PROFILES_PREFERENCES, jsonProfilesString);
+        editor.apply();
+    }
+
+    /**
      * Get the list of profiles from a json text.
      *
      * @param profilesJson the json text.
