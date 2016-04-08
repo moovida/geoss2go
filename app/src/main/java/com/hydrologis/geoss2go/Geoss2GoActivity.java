@@ -26,6 +26,7 @@ import com.hydrologis.geoss2go.dialogs.NewProfileDialogFragment;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDialogFragment.INewProfileCreatedListener {
@@ -78,6 +79,19 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
         });
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        if (profileList != null) {
+            try {
+                ProfilesHandler.INSTANCE.saveProfilesToPreferences(mPeferences, profileList);
+            } catch (JSONException e) {
+                Log.e("GEOS2GO", "Error saving profiles", e);
+            }
+        }
+    }
+
     private void loadProfiles() {
         profilesContainer.removeAllViews();
 
@@ -122,6 +136,7 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
         Profile p = new Profile();
         p.name = name;
         p.description = description;
+        p.creationdate = new Date().toString();
         profileList.add(p);
         loadProfiles();
     }

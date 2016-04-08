@@ -132,6 +132,7 @@ public enum ProfilesHandler {
 
         for (Profile profile : profilesList) {
             JSONObject profileObject = new JSONObject();
+            profilesArray.put(profileObject);
 
             profileObject.put(NAME, profile.name);
             profileObject.put(DESCRIPTION, profile.description);
@@ -155,7 +156,7 @@ public enum ProfilesHandler {
                 for (int j = 0; j < profile.spatialiteList.size(); j++) {
                     JSONObject spatialiteDbObject = new JSONObject();
                     spatialiteDbObject.put(PATH, profile.spatialiteList.get(j));
-                    spatialiteDbsArray.put(j, spatialiteDbObject);
+                    spatialiteDbsArray.put(spatialiteDbObject);
                 }
                 profileObject.put(SPATIALITE, spatialiteDbsArray);
             }
