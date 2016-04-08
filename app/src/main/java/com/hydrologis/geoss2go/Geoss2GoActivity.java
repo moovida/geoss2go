@@ -33,6 +33,7 @@ import java.util.List;
 import eu.geopaparazzi.library.core.dialogs.ColorStrokeDialogFragment;
 import eu.geopaparazzi.library.style.ColorStrokeObject;
 import eu.geopaparazzi.library.style.ColorUtilities;
+import eu.geopaparazzi.library.util.GPDialogs;
 
 public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDialogFragment.INewProfileCreatedListener, ColorStrokeDialogFragment.IColorStrokePropertiesChangeListener {
 
@@ -91,19 +92,18 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
         super.onPause();
 
         if (profileList != null) {
-            try {
-                ProfilesHandler.INSTANCE.saveProfilesToPreferences(mPeferences, profileList);
-            } catch (JSONException e) {
-                Log.e("GEOS2GO", "Error saving profiles", e);
-            }
+            saveProfiles();
         }
     }
 
     private void loadProfiles() {
         profilesContainer.removeAllViews();
 
-        if (profileList.size() != 0)
+        if (profileList.size() != 0) {
             emptyFiller.setVisibility(View.GONE);
+        } else {
+            emptyFiller.setVisibility(View.VISIBLE);
+        }
 
         for (final Profile profile : profileList) {
             final CardView newProjectCardView = (CardView) getLayoutInflater().inflate(R.layout.profile_cardlayout, null);
@@ -116,6 +116,27 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
             settingsButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                }
+            });
+            ImageButton deleteButton = (ImageButton) newProjectCardView.findViewById(R.id.deleteButton);
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String msg = String.format("Are you sure you want to remove the profile: '%s'? This can't be undone.", profile.name);
+                    GPDialogs.yesNoMessageDialog(Geoss2GoActivity.this, msg, new Runnable() {
+                        @Override
+                        public void run() {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    profileList.remove(profile);
+                                    saveProfiles();
+                                    loadProfiles();
+                                }
+                            });
+                        }
+                    }, null);
 
                 }
             });
@@ -190,11 +211,15 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
             setCardviewColor(currentColorCardView, newColor);
 
             // and save it to disk
-            try {
-                ProfilesHandler.INSTANCE.saveProfilesToPreferences(mPeferences, profileList);
-            } catch (JSONException e) {
-                Log.e("GEOS2GO", "Error saving profiles", e);
-            }
+            saveProfiles();
+        }
+    }
+
+    private void saveProfiles() {
+        try {
+            ProfilesHandler.INSTANCE.saveProfilesToPreferences(mPeferences, profileList);
+        } catch (JSONException e) {
+            Log.e("GEOS2GO", "Error saving profiles", e);
         }
     }
 }
