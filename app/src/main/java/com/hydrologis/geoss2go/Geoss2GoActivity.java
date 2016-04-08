@@ -10,6 +10,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
@@ -51,6 +53,9 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
 
         profilesContainer = (LinearLayout) findViewById(R.id.profiles_container);
         emptyFiller = (LinearLayout) findViewById(R.id.empty_fillers);
+        TextView licenseText = (TextView) findViewById(R.id.license_text_on_empty);
+        licenseText.setText(Html.fromHtml(getString(R.string.license_text)));
+        licenseText.setMovementMethod(LinkMovementMethod.getInstance());
 
         mPeferences = PreferenceManager.getDefaultSharedPreferences(this);
 

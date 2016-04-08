@@ -1,18 +1,18 @@
 <resources>
     <string name="app_name">Geoss2Go</string>
     <string name="license_text">
-        "Geoss2Go.\n\n"
+        <![CDATA[
+        <p>This application has been developed within the
+        <b>MyGEOSS project</b> , which has received funding from the
+        <b>European Union’s Horizon 2020</b> research and innovation programme.</p>
 
-        "Acknowledgement: This application has been developed within the"
-        "MyGEOSS project, which has received funding from the European"
-        "Union’s Horizon 2020 research and innovation programme.\n\n\n"
+        <p>To unleash the power of this app you need to install also
+        the digital field mapping app Geopaparazzi. To do so,
+        <a href="https://play.google.com/store/apps/details?id=eu.hydrologis.geopaparazzi">
+        click here</a>.</p>
 
-        "To unleash the power of this app you need to install also"
-        "the digital field mapping app Geopaparazzi. If not already"
-        "installed at startup you will be aided through the installation"
-        "process.\n\n\n"
-
-        "To create a new profile simply push the plus button on the upper right corner.\n\n"
+        <p>To create a new profile simply <b>push the plus button</b> on the upper right corner.</p>
+        ]]>
     </string>
     <string name="action_settings">Settings</string>
 </resources>
