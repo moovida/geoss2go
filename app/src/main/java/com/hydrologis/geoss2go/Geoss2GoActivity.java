@@ -26,17 +26,23 @@ import com.hydrologis.geoss2go.dialogs.NewProfileDialogFragment;
 
 import org.json.JSONException;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import eu.geopaparazzi.library.core.ResourcesManager;
 import eu.geopaparazzi.library.core.dialogs.ColorStrokeDialogFragment;
+import eu.geopaparazzi.library.permissions.IChainedPermissionHelper;
+import eu.geopaparazzi.library.permissions.PermissionWriteStorage;
 import eu.geopaparazzi.library.style.ColorStrokeObject;
 import eu.geopaparazzi.library.style.ColorUtilities;
+import eu.geopaparazzi.library.util.FileUtilities;
 import eu.geopaparazzi.library.util.GPDialogs;
 
 public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDialogFragment.INewProfileCreatedListener, ColorStrokeDialogFragment.IColorStrokePropertiesChangeListener {
 
+    public static final String PROFILES_CONFIG_JSON = "profiles_config.json";
     private LinearLayout profilesContainer;
     private LinearLayout emptyFiller;
     private SharedPreferences mPeferences;
@@ -44,6 +50,8 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
     private List<Profile> profileList = new ArrayList<>();
     private CardView currentColorCardView;
     private Profile currentProfile;
+
+    private IChainedPermissionHelper permissionHelper = new PermissionWriteStorage();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +93,32 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
                 newProfileDialogFragment.show(getSupportFragmentManager(), "New Profile Dialog");
             }
         });
+
+        checkPermissions();
     }
+
+    private void checkPermissions() {
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            if (!permissionHelper.hasPermission(this)) {
+                permissionHelper.requestPermission(this);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String[] permissions, int[] grantResults) {
+        if (!permissionHelper.hasGainedPermission(requestCode, grantResults)) {
+            GPDialogs.infoDialog(this, "Geoss2Go can't be started because the following permission was not granted: " + permissionHelper.getDescription(), new Runnable() {
+                @Override
+                public void run() {
+                    finish();
+                }
+            });
+        }
+    }
+
 
     @Override
     protected void onPause() {
@@ -174,23 +207,59 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_geoss2_go, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_import) {
+            importProfiles();
+            return true;
+        } else if (id == R.id.action_export) {
+            exportProfiles();
+            return true;
+        } else if (id == R.id.action_delete_all) {
+            profileList.clear();
+            saveProfiles();
+            loadProfiles();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void importProfiles() {
+        try {
+            ResourcesManager resourcesManager = ResourcesManager.getInstance(this);
+            File applicationSupporterDir = resourcesManager.getApplicationSupporterDir();
+            File inputFile = new File(applicationSupporterDir, PROFILES_CONFIG_JSON);
+            if (inputFile.exists()) {
+                String profilesJson = FileUtilities.readfile(inputFile);
+                List<Profile> importedProfiles = ProfilesHandler.INSTANCE.getProfilesFromJson(profilesJson);
+                profileList.addAll(importedProfiles);
+                saveProfiles();
+                loadProfiles();
+            } else {
+                GPDialogs.warningDialog(this, "No profiles file exist in the path: " + inputFile.getAbsolutePath(), null);
+            }
+        } catch (Exception e) {
+            GPDialogs.warningDialog(this, "An error occurred: " + e.getLocalizedMessage(), null);
+            Log.e("GEOS2GO", "", e);
+        }
+    }
+
+    private void exportProfiles() {
+        try {
+            ResourcesManager resourcesManager = ResourcesManager.getInstance(this);
+            File applicationSupporterDir = resourcesManager.getApplicationSupporterDir();
+            File outFile = new File(applicationSupporterDir, PROFILES_CONFIG_JSON);
+            String jsonFromProfiles = ProfilesHandler.INSTANCE.getJsonFromProfilesList(profileList, true);
+            FileUtilities.writefile(jsonFromProfiles, outFile);
+        } catch (Exception e) {
+            GPDialogs.warningDialog(this, "An error occurred: " + e.getLocalizedMessage(), null);
+            Log.e("GEOS2GO", "", e);
+        }
     }
 
     @Override

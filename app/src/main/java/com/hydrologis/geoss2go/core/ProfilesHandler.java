@@ -62,7 +62,7 @@ public enum ProfilesHandler {
      * @throws JSONException
      */
     @NonNull
-    private List<Profile> getProfilesFromJson(String profilesJson) throws JSONException {
+    public List<Profile> getProfilesFromJson(String profilesJson) throws JSONException {
         List<Profile> profilesList = new ArrayList<>();
 
         if (profilesJson.trim().length() == 0)
