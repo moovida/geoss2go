@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 
 import com.hydrologis.geoss2go.R;
-import com.hydrologis.geoss2go.core.Profile;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,6 +25,7 @@ import java.util.List;
 
 import eu.geopaparazzi.library.core.ResourcesManager;
 import eu.geopaparazzi.library.core.activities.DirectoryBrowserActivity;
+import eu.geopaparazzi.library.profiles.Profile;
 import eu.geopaparazzi.library.util.FileUtilities;
 import eu.geopaparazzi.library.util.LibraryConstants;
 

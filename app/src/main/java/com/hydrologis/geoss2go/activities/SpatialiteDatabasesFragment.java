@@ -14,7 +14,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.hydrologis.geoss2go.R;
-import com.hydrologis.geoss2go.core.Profile;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -22,6 +21,7 @@ import java.util.List;
 
 import eu.geopaparazzi.library.core.ResourcesManager;
 import eu.geopaparazzi.library.core.activities.DirectoryBrowserActivity;
+import eu.geopaparazzi.library.profiles.Profile;
 import eu.geopaparazzi.library.util.GPDialogs;
 import eu.geopaparazzi.library.util.LibraryConstants;
 

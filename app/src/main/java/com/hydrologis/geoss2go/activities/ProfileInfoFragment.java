@@ -13,7 +13,8 @@ import android.widget.Switch;
 
 import com.hydrologis.geoss2go.R;
 
-import com.hydrologis.geoss2go.core.Profile;
+import eu.geopaparazzi.library.profiles.Profile;
+
 
 public class ProfileInfoFragment extends Fragment implements TextWatcher, CompoundButton.OnCheckedChangeListener {
     private static final String ARG_PROFILE = "profile";

@@ -42,6 +42,13 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".activities.ProfileSettingsActivity" />
         </activity>
+
+
+        <provider
+            android:name=".contentproviders.ProfilesContentProvider"
+            android:authorities="eu.geopaparazzi.provider.profiles"
+            android:enabled="true"
+            android:exported="false" />
     </application>
 
 </manifest>

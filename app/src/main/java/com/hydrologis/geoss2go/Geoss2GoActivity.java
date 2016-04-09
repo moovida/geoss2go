@@ -24,8 +24,6 @@ import android.widget.TextView;
 
 import com.hydrologis.geoss2go.activities.FormTagsFragment;
 import com.hydrologis.geoss2go.activities.ProfileSettingsActivity;
-import com.hydrologis.geoss2go.core.Profile;
-import com.hydrologis.geoss2go.core.ProfilesHandler;
 import com.hydrologis.geoss2go.dialogs.NewProfileDialogFragment;
 
 import org.json.JSONException;
@@ -40,6 +38,8 @@ import eu.geopaparazzi.library.core.ResourcesManager;
 import eu.geopaparazzi.library.core.dialogs.ColorStrokeDialogFragment;
 import eu.geopaparazzi.library.permissions.IChainedPermissionHelper;
 import eu.geopaparazzi.library.permissions.PermissionWriteStorage;
+import eu.geopaparazzi.library.profiles.Profile;
+import eu.geopaparazzi.library.profiles.ProfilesHandler;
 import eu.geopaparazzi.library.style.ColorStrokeObject;
 import eu.geopaparazzi.library.style.ColorUtilities;
 import eu.geopaparazzi.library.util.FileUtilities;
