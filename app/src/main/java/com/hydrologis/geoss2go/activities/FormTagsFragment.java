@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,11 +14,9 @@ import com.hydrologis.geoss2go.R;
 import com.hydrologis.geoss2go.core.Profile;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -68,7 +64,7 @@ public class FormTagsFragment extends Fragment {
         if (profile != null && profile.tagsPath != null && new File(profile.tagsPath).exists()) {
             setFormData(profile.tagsPath);
         }
-        FloatingActionButton addFormButton = (FloatingActionButton) rootView.findViewById(R.id.addFormButton);
+        FloatingActionButton addFormButton = (FloatingActionButton) rootView.findViewById(R.id.addBasemapButton);
         addFormButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

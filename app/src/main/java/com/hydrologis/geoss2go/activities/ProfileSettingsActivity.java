@@ -146,6 +146,16 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         profile.basemapsList.remove(path);
     }
 
+    public void onSpatialitedbRemoved(String path) {
+        Profile profile = mProfileList.get(mSelectedProfileIndex);
+        profile.spatialiteList.remove(path);
+    }
+
+    public void onSpatialitedbAdded(String path) {
+        Profile profile = mProfileList.get(mSelectedProfileIndex);
+        profile.spatialiteList.add(path);
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -166,7 +176,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 case 1:
                     return BasemapsFragment.newInstance(profile);
                 case 2:
-                    return ProfileInfoFragment.newInstance(profile);
+                    return SpatialiteDatabasesFragment.newInstance(profile);
                 case 3:
                     return FormTagsFragment.newInstance(profile);
             }
