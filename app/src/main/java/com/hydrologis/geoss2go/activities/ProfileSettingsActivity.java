@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.hydrologis.geoss2go.Geoss2GoActivity;
 import com.hydrologis.geoss2go.R;
@@ -52,6 +53,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_settings);
 
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
         Bundle extras = getIntent().getExtras();
         Profile selectedProfile = extras.getParcelable(Geoss2GoActivity.KEY_SELECTED_PROFILE);
@@ -134,6 +136,16 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         profile.tagsPath = path;
     }
 
+    public void onBasemapAdded(String path) {
+        Profile profile = mProfileList.get(mSelectedProfileIndex);
+        profile.basemapsList.add(path);
+    }
+
+    public void onBasemapRemoved(String path) {
+        Profile profile = mProfileList.get(mSelectedProfileIndex);
+        profile.basemapsList.remove(path);
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -152,7 +164,7 @@ public class ProfileSettingsActivity extends AppCompatActivity {
                 case 0:
                     return ProfileInfoFragment.newInstance(profile);
                 case 1:
-                    return ProfileInfoFragment.newInstance(profile);
+                    return BasemapsFragment.newInstance(profile);
                 case 2:
                     return ProfileInfoFragment.newInstance(profile);
                 case 3:

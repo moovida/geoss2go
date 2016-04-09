@@ -75,14 +75,12 @@ public class FormTagsFragment extends Fragment {
                 try {
                     File sdcardDir = ResourcesManager.getInstance(getContext()).getSdcardDir();
                     Intent browseIntent = new Intent(getContext(), DirectoryBrowserActivity.class);
-//                browseIntent.putExtra(DirectoryBrowserActivity.PUT_PATH_PREFERENCE, PREFS_KEY_CUSTOM_EXTERNALSTORAGE);
-                    browseIntent.putExtra(DirectoryBrowserActivity.EXTENTION, "json");
+                    browseIntent.putExtra(DirectoryBrowserActivity.EXTENSIONS, new String[]{"json"});
                     browseIntent.putExtra(DirectoryBrowserActivity.STARTFOLDERPATH, sdcardDir.getAbsolutePath());
                     startActivityForResult(browseIntent, RETURNCODE_BROWSE);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
         });
 
