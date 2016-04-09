@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import eu.geopaparazzi.library.core.ResourcesManager;
+import eu.geopaparazzi.library.style.ColorUtilities;
 import eu.geopaparazzi.library.util.FileUtilities;
 import eu.geopaparazzi.library.util.GPDialogs;
 import gov.nasa.worldwind.AddWMSDialog;
@@ -83,6 +84,9 @@ public class ProfileSettingsActivity extends AppCompatActivity implements AddWMS
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
+
+        int color = ColorUtilities.toColor(selectedProfile.color);
+        mViewPager.setBackgroundColor(color);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
