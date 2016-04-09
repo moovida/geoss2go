@@ -1,6 +1,7 @@
 package com.hydrologis.geoss2go.activities;
 
-import android.os.Parcelable;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.support.design.widget.TabLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -12,18 +13,19 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.hydrologis.geoss2go.Geoss2GoActivity;
 import com.hydrologis.geoss2go.R;
 import com.hydrologis.geoss2go.core.Profile;
+import com.hydrologis.geoss2go.core.ProfilesHandler;
+
+import org.json.JSONException;
+
+import java.util.List;
 
 public class ProfileSettingsActivity extends AppCompatActivity {
 
@@ -41,7 +43,9 @@ public class ProfileSettingsActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private Profile selectedProfile;
+    private int mSelectedProfileIndex;
+    private SharedPreferences mPeferences;
+    private List<Profile> mProfileList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +54,17 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
 
         Bundle extras = getIntent().getExtras();
-        selectedProfile = extras.getParcelable(Geoss2GoActivity.KEY_SELECTED_PROFILE);
+        Profile selectedProfile = extras.getParcelable(Geoss2GoActivity.KEY_SELECTED_PROFILE);
+
+        mPeferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        try {
+            mProfileList = ProfilesHandler.INSTANCE.getProfilesFromPreferences(mPeferences);
+        } catch (JSONException e) {
+            Log.e("GEOS2GO", "", e);
+        }
+
+        mSelectedProfileIndex = mProfileList.indexOf(selectedProfile);
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -101,52 +115,29 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-        private static final String ARG_PROFILE = "profile";
 
-        public PlaceholderFragment() {
-        }
+    @Override
+    protected void onPause() {
+        super.onPause();
 
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber, Profile profile) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            args.putParcelable(ARG_PROFILE, profile);
-            fragment.setArguments(args);
-            return fragment;
-        }
+        if (mProfileList != null) {
+            Profile profile = mProfileList.get(mSelectedProfileIndex);
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_profilesettings_info, container, false);
 
-            Profile profile = getArguments().getParcelable(ARG_PROFILE);
-
-            EditText nameEdittext = (EditText) rootView.findViewById(R.id.profileNameEditText);
-            nameEdittext.setText(profile.name);
-            EditText descriptionEdittext = (EditText) rootView.findViewById(R.id.profileDescriptionEditText);
-            descriptionEdittext.setText(profile.description);
-            EditText creationdateEdittext = (EditText) rootView.findViewById(R.id.profileCreationdateEditText);
-            creationdateEdittext.setText(profile.creationdate);
-
-//            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-//            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
+            try {
+                ProfilesHandler.INSTANCE.saveProfilesToPreferences(mPeferences, mProfileList);
+            } catch (JSONException e) {
+                Log.e("GEOS2GO", "Error saving profiles", e);
+            }
         }
     }
+
+    public void onProfileInfoChanged(String name, String description) {
+        Profile profile = mProfileList.get(mSelectedProfileIndex);
+        profile.name = name;
+        profile.description = description;
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -160,9 +151,17 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1, selectedProfile);
+            switch (position) {
+                case 0:
+                    return ProfileInfoFragment.newInstance(mProfileList.get(mSelectedProfileIndex));
+                case 1:
+                    return ProfileInfoFragment.newInstance(mProfileList.get(mSelectedProfileIndex));
+                case 2:
+                    return ProfileInfoFragment.newInstance(mProfileList.get(mSelectedProfileIndex));
+                case 3:
+                    return ProfileInfoFragment.newInstance(mProfileList.get(mSelectedProfileIndex));
+            }
+            return null;
         }
 
         @Override

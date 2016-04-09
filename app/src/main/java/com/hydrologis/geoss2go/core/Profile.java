@@ -25,6 +25,24 @@ public class Profile implements Parcelable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Profile)) {
+            return false;
+        }
+        Profile p = (Profile) o;
+        if (p.name != null && name != null && !p.name.equals(name)) {
+            return false;
+        }
+        if (p.description != null && description != null && !p.description.equals(description)) {
+            return false;
+        }
+        if (p.creationdate != null && creationdate != null && !p.creationdate.equals(creationdate)) {
+            return false;
+        }
+        return true;
+    }
+
+    @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(name);
         dest.writeString(description);
