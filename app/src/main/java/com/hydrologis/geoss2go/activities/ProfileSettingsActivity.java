@@ -242,6 +242,17 @@ public class ProfileSettingsActivity extends AppCompatActivity implements AddWMS
         return mProfileList.get(mSelectedProfileIndex);
     }
 
+    public void onActiveProfileChanged(boolean isChecked) {
+        for (int i = 0; i < mProfileList.size(); i++) {
+            Profile profile = mProfileList.get(i);
+            if (i == mSelectedProfileIndex && isChecked) {
+                profile.active = true;
+            } else {
+                profile.active = false;
+            }
+        }
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to

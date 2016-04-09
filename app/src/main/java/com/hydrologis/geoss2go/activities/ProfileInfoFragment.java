@@ -7,13 +7,15 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 
 import com.hydrologis.geoss2go.R;
 
 import com.hydrologis.geoss2go.core.Profile;
 
-public class ProfileInfoFragment extends Fragment implements TextWatcher {
+public class ProfileInfoFragment extends Fragment implements TextWatcher, CompoundButton.OnCheckedChangeListener {
     private static final String ARG_PROFILE = "profile";
     private EditText nameEdittext;
     private EditText descriptionEdittext;
@@ -52,6 +54,17 @@ public class ProfileInfoFragment extends Fragment implements TextWatcher {
         creationdateEdittext = (EditText) rootView.findViewById(R.id.profileCreationdateEditText);
         creationdateEdittext.setText(profile.creationdate);
         creationdateEdittext.addTextChangedListener(this);
+
+        final Switch activeSwitch = (Switch) rootView.findViewById(R.id.activeSwitch);
+        activeSwitch.setChecked(profile.active);
+        activeSwitch.setOnCheckedChangeListener(this);
+        if (profile.active) {
+            activeSwitch.setText(R.string.deactivate_profile);
+        } else {
+            activeSwitch.setText(R.string.activate_profile);
+        }
+
+
         return rootView;
     }
 
@@ -69,5 +82,11 @@ public class ProfileInfoFragment extends Fragment implements TextWatcher {
     public void afterTextChanged(Editable s) {
         ProfileSettingsActivity activity = (ProfileSettingsActivity) getActivity();
         activity.onProfileInfoChanged(nameEdittext.getText().toString(), descriptionEdittext.getText().toString());
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+        ProfileSettingsActivity activity = (ProfileSettingsActivity) getActivity();
+        activity.onActiveProfileChanged(isChecked);
     }
 }

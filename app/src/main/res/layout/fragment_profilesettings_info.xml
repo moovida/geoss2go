@@ -13,12 +13,12 @@
         android:id="@+id/profileNameEditTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="fill_horizontal"
-        android:hint="Profile Name"
-        android:layout_margin="15dp"
-        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentTop="true"
+        android:layout_gravity="fill_horizontal"
+        android:layout_margin="15dp"
+        android:hint="Profile Name">
 
         <EditText
             android:id="@+id/profileNameEditText"
@@ -33,8 +33,8 @@
         android:id="@+id/profileDescriptionEditTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="fill_horizontal"
         android:layout_below="@+id/profileNameEditTextLayout"
+        android:layout_gravity="fill_horizontal"
         android:layout_margin="15dp"
         android:hint="Profile Description">
 
@@ -52,8 +52,8 @@
         android:id="@+id/profileCreationdateEditTextLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="fill_horizontal"
         android:layout_below="@+id/profileDescriptionEditTextLayout"
+        android:layout_gravity="fill_horizontal"
         android:layout_margin="15dp"
         android:hint="Creation Date">
 
@@ -66,6 +66,15 @@
             android:text="" />
 
     </android.support.design.widget.TextInputLayout>
+
+    <Switch
+        android:id="@+id/activeSwitch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profileCreationdateEditTextLayout"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="45dp"
+        android:text="" />
 
 
 </RelativeLayout>

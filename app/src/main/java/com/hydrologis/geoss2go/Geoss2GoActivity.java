@@ -227,6 +227,20 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
             setCardviewColor(newProjectCardView, color);
 //            newProjectCardView.setBackgroundColor(backgroundColor);
 
+            LinearLayout activeLayoutTop = (LinearLayout) newProjectCardView.findViewById(R.id.activeColorLayoutTop);
+            LinearLayout activeLayoutBottom = (LinearLayout) newProjectCardView.findViewById(R.id.activeColorLayoutBottom);
+            if (profile.active) {
+                activeLayoutTop.setVisibility(View.VISIBLE);
+                activeLayoutTop.setBackgroundColor(Color.RED);
+                activeLayoutBottom.setVisibility(View.VISIBLE);
+                activeLayoutBottom.setBackgroundColor(Color.RED);
+            } else {
+                activeLayoutTop.setVisibility(View.INVISIBLE);
+                activeLayoutTop.setBackgroundColor(Color.WHITE);
+                activeLayoutBottom.setVisibility(View.INVISIBLE);
+                activeLayoutBottom.setBackgroundColor(Color.WHITE);
+            }
+
             profilesContainer.addView(newProjectCardView);
         }
 

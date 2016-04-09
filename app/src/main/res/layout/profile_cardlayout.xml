@@ -9,8 +9,6 @@
     android:padding="20dip"
     card_view:cardElevation="6dp"
     card_view:cardUseCompatPadding="true">
-    <!--android:layout_gravity="center"-->
-    <!--card_view:cardCornerRadius="4dp"-->
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -19,12 +17,23 @@
         android:orientation="vertical"
         android:padding="10dip">
 
+        <LinearLayout
+            android:id="@+id/activeColorLayoutTop"
+            android:layout_width="match_parent"
+            android:layout_height="5dip"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="15dip"
+            android:background="#FF0000"
+            android:orientation="vertical" />
 
         <TextView
             android:id="@+id/profileNameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dip"
+            android:layout_below="@+id/activeColorLayoutTop"
             android:text="Profile Name"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
@@ -50,7 +59,7 @@
             android:layout_width="@dimen/min_touch_size"
             android:layout_height="@dimen/min_touch_size"
             android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/activeColorLayoutTop"
             android:layout_marginBottom="10dip"
             android:background="@drawable/ic_settings_primary_24dp" />
 
@@ -70,6 +79,17 @@
             android:layout_alignParentEnd="true"
             android:layout_below="@+id/colorButton"
             android:background="@drawable/ic_delete_primary_24dp" />
+
+        <LinearLayout
+            android:id="@+id/activeColorLayoutBottom"
+            android:layout_width="match_parent"
+            android:layout_height="5dip"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="15dip"
+            android:background="#FF0000"
+            android:orientation="vertical" />
 
     </RelativeLayout>
 

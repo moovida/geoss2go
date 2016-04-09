@@ -20,4 +20,6 @@
     <string name="action_delete">Delete all Profiles</string>
     <string name="title_activity_profile_settings">Profile Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="deactivate_profile">Deactivate profile</string>
+    <string name="activate_profile">Activate profile</string>
 </resources>
