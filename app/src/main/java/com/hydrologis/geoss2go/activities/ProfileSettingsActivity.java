@@ -81,15 +81,6 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
     }
 
 
@@ -138,6 +129,11 @@ public class ProfileSettingsActivity extends AppCompatActivity {
         profile.description = description;
     }
 
+    public void onFormPathChanged(String path) {
+        Profile profile = mProfileList.get(mSelectedProfileIndex);
+        profile.tagsPath = path;
+    }
+
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -151,15 +147,16 @@ public class ProfileSettingsActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
+            Profile profile = mProfileList.get(mSelectedProfileIndex);
             switch (position) {
                 case 0:
-                    return ProfileInfoFragment.newInstance(mProfileList.get(mSelectedProfileIndex));
+                    return ProfileInfoFragment.newInstance(profile);
                 case 1:
-                    return ProfileInfoFragment.newInstance(mProfileList.get(mSelectedProfileIndex));
+                    return ProfileInfoFragment.newInstance(profile);
                 case 2:
-                    return ProfileInfoFragment.newInstance(mProfileList.get(mSelectedProfileIndex));
+                    return ProfileInfoFragment.newInstance(profile);
                 case 3:
-                    return ProfileInfoFragment.newInstance(mProfileList.get(mSelectedProfileIndex));
+                    return FormTagsFragment.newInstance(profile);
             }
             return null;
         }
