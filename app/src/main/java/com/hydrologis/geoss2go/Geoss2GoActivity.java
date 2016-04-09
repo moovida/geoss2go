@@ -22,6 +22,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.hydrologis.geoss2go.activities.FormTagsFragment;
 import com.hydrologis.geoss2go.activities.ProfileSettingsActivity;
 import com.hydrologis.geoss2go.core.Profile;
 import com.hydrologis.geoss2go.core.ProfilesHandler;
@@ -30,6 +31,7 @@ import com.hydrologis.geoss2go.dialogs.NewProfileDialogFragment;
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -42,6 +44,7 @@ import eu.geopaparazzi.library.style.ColorStrokeObject;
 import eu.geopaparazzi.library.style.ColorUtilities;
 import eu.geopaparazzi.library.util.FileUtilities;
 import eu.geopaparazzi.library.util.GPDialogs;
+import eu.geopaparazzi.library.util.TimeUtilities;
 
 public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDialogFragment.INewProfileCreatedListener, ColorStrokeDialogFragment.IColorStrokePropertiesChangeListener {
 
@@ -80,14 +83,6 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
 
         mPeferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        try {
-            profileList = ProfilesHandler.INSTANCE.getProfilesFromPreferences(mPeferences);
-        } catch (JSONException e) {
-            Log.e("GEOS2GO", "", e);
-        }
-
-        loadProfiles();
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
@@ -123,6 +118,18 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        try {
+            profileList = ProfilesHandler.INSTANCE.getProfilesFromPreferences(mPeferences);
+        } catch (JSONException e) {
+            Log.e("GEOS2GO", "", e);
+        }
+
+        loadProfiles();
+    }
 
     @Override
     protected void onPause() {
@@ -148,6 +155,25 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
             profileNameText.setText(profile.name);
             TextView profileDescriptionText = (TextView) newProjectCardView.findViewById(R.id.profileDescriptionText);
             profileDescriptionText.setText(profile.description);
+
+            TextView profilesummaryText = (TextView) newProjectCardView.findViewById(R.id.profileSummaryText);
+            StringBuilder sb = new StringBuilder();
+            sb.append("Basemaps: ").append(profile.basemapsList.size()).append("\n");
+            sb.append("Spatialite dbs: ").append(profile.spatialiteList.size()).append("\n");
+            int formsCount = 0;
+            if (profile.tagsPath != null && profile.tagsPath.length() != 0) {
+                File tagsFile = new File(profile.tagsPath);
+                if (tagsFile.exists()) {
+                    try {
+                        List<String> sections = FormTagsFragment.getSectionsFromTagsFile(tagsFile);
+                        formsCount = sections.size();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            sb.append("Forms: ").append(formsCount).append("\n");
+            profilesummaryText.setText(sb.toString());
 
             ImageButton settingsButton = (ImageButton) newProjectCardView.findViewById(R.id.settingsButton);
             settingsButton.setOnClickListener(new View.OnClickListener() {
@@ -273,7 +299,7 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
         Profile p = new Profile();
         p.name = name;
         p.description = description;
-        p.creationdate = new Date().toString();
+        p.creationdate = TimeUtilities.INSTANCE.TIME_FORMATTER_LOCAL.format(new Date());
         profileList.add(p);
         loadProfiles();
     }

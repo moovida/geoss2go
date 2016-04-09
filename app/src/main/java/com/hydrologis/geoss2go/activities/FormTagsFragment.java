@@ -3,6 +3,7 @@ package com.hydrologis.geoss2go.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -14,9 +15,11 @@ import com.hydrologis.geoss2go.R;
 import com.hydrologis.geoss2go.core.Profile;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -86,23 +89,29 @@ public class FormTagsFragment extends Fragment {
     private void setFormData(String tagsPath) {
         try {
             File file = new File(tagsPath);
-            List<String> sectionsMap = new ArrayList<>();
-            String tagsFileString = FileUtilities.readfile(file);
-            JSONArray sectionsArrayObj = new JSONArray(tagsFileString);
-            int tagsNum = sectionsArrayObj.length();
-            for (int i = 0; i < tagsNum; i++) {
-                JSONObject jsonObject = sectionsArrayObj.getJSONObject(i);
-                if (jsonObject.has(ATTR_SECTIONNAME)) {
-                    String sectionName = jsonObject.get(ATTR_SECTIONNAME).toString();
-                    sectionsMap.add(sectionName);
-                }
-            }
+            List<String> sectionsMap = getSectionsFromTagsFile(file);
             nameEdittext.setText(file.getName());
             pathEdittext.setText(file.getAbsolutePath());
             formsEdittext.setText(Arrays.toString(sectionsMap.toArray()));
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @NonNull
+    public static List<String> getSectionsFromTagsFile(File file) throws IOException, JSONException {
+        List<String> sectionsMap = new ArrayList<>();
+        String tagsFileString = FileUtilities.readfile(file);
+        JSONArray sectionsArrayObj = new JSONArray(tagsFileString);
+        int tagsNum = sectionsArrayObj.length();
+        for (int i = 0; i < tagsNum; i++) {
+            JSONObject jsonObject = sectionsArrayObj.getJSONObject(i);
+            if (jsonObject.has(ATTR_SECTIONNAME)) {
+                String sectionName = jsonObject.get(ATTR_SECTIONNAME).toString();
+                sectionsMap.add(sectionName);
+            }
+        }
+        return sectionsMap;
     }
 
     @Override

@@ -33,8 +33,17 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/profileNameText"
+            android:layout_marginBottom="20dip"
             android:text="Profile Description"
             android:textAppearance="?android:attr/textAppearanceSmall" />
+
+        <TextView
+            android:id="@+id/profileSummaryText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/profileDescriptionText"
+            android:text=""
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
         <ImageButton
             android:id="@+id/settingsButton"

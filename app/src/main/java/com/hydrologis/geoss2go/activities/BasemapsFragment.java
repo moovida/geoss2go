@@ -1,11 +1,15 @@
 package com.hydrologis.geoss2go.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,8 +26,10 @@ import java.util.List;
 
 import eu.geopaparazzi.library.core.ResourcesManager;
 import eu.geopaparazzi.library.core.activities.DirectoryBrowserActivity;
+import eu.geopaparazzi.library.network.NetworkUtilities;
 import eu.geopaparazzi.library.util.GPDialogs;
 import eu.geopaparazzi.library.util.LibraryConstants;
+import gov.nasa.worldwind.AddWMSDialog;
 
 public class BasemapsFragment extends Fragment {
     private static final String ARG_PROFILE = "profile";
@@ -51,15 +57,39 @@ public class BasemapsFragment extends Fragment {
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_profile_settings_basemaps, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_addwms) {
+            Context context = getActivity();
+            if (!NetworkUtilities.isNetworkAvailable(context)) {
+                GPDialogs.infoDialog(context, context.getString(R.string.available_only_with_network), null);
+            } else {
+                AddWMSDialog addWMSDialog = AddWMSDialog.newInstance(null);
+                addWMSDialog.show(getFragmentManager(), "wms import");
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_profilesettings_basemaps, container, false);
 
         listView = (ListView) rootView.findViewById(R.id.basemapsList);
-
-        Profile profile = getArguments().getParcelable(ARG_PROFILE);
-        mBasemapsList.clear();
-        mBasemapsList.addAll(profile.basemapsList);
 
         FloatingActionButton addFormButton = (FloatingActionButton) rootView.findViewById(R.id.addBasemapButton);
         addFormButton.setOnClickListener(new View.OnClickListener() {
@@ -77,9 +107,18 @@ public class BasemapsFragment extends Fragment {
             }
         });
 
-        refreshList();
-
         return rootView;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        ProfileSettingsActivity activity = (ProfileSettingsActivity) getActivity();
+        Profile profile = activity.getSelectedProfile();
+        mBasemapsList.clear();
+        mBasemapsList.addAll(profile.basemapsList);
+        refreshList();
     }
 
     private void refreshList() {
