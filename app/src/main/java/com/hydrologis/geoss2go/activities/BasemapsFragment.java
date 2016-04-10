@@ -91,7 +91,7 @@ public class BasemapsFragment extends Fragment {
 
         listView = (ListView) rootView.findViewById(R.id.basemapsList);
 
-        FloatingActionButton addFormButton = (FloatingActionButton) rootView.findViewById(R.id.addBasemapButton);
+        FloatingActionButton addFormButton = (FloatingActionButton) rootView.findViewById(R.id.addFormsjsonButton);
         addFormButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

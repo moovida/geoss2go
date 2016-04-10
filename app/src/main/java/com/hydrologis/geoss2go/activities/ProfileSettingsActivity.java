@@ -118,6 +118,11 @@ public class ProfileSettingsActivity extends AppCompatActivity implements AddWMS
         profile.tagsPath = path;
     }
 
+    public void onProjectPathChanged(String path) {
+        Profile profile = mProfileList.get(mSelectedProfileIndex);
+        profile.projectPath = path;
+    }
+
     public void onBasemapAdded(String path) {
         Profile profile = mProfileList.get(mSelectedProfileIndex);
         profile.basemapsList.add(path);
@@ -276,6 +281,8 @@ public class ProfileSettingsActivity extends AppCompatActivity implements AddWMS
                     return SpatialiteDatabasesFragment.newInstance(profile);
                 case 3:
                     return FormTagsFragment.newInstance(profile);
+                case 4:
+                    return ProjectFragment.newInstance(profile);
             }
             return null;
         }
@@ -294,7 +301,7 @@ public class ProfileSettingsActivity extends AppCompatActivity implements AddWMS
 
         @Override
         public int getCount() {
-            return 4;
+            return 5;
         }
 
         @Override
@@ -308,6 +315,8 @@ public class ProfileSettingsActivity extends AppCompatActivity implements AddWMS
                     return "Spatialite Databases";
                 case 3:
                     return "Forms";
+                case 4:
+                    return "Project";
             }
             return null;
         }

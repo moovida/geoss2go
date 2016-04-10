@@ -173,6 +173,7 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
                 }
             }
             sb.append("Forms: ").append(formsCount).append("\n");
+            sb.append("Has project: ").append(profile.projectPath.length() == 0 ? "no" : "yes").append("\n");
             profilesummaryText.setText(sb.toString());
 
             ImageButton settingsButton = (ImageButton) newProjectCardView.findViewById(R.id.settingsButton);
