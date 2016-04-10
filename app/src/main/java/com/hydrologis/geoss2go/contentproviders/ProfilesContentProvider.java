@@ -13,6 +13,7 @@ import android.preference.PreferenceManager;
 
 import org.json.JSONException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import eu.geopaparazzi.library.profiles.Profile;
@@ -32,16 +33,9 @@ public class ProfilesContentProvider extends ContentProvider {
         uriMatcher.addURI(ProfilesHandler.AUTHORITY, ProfilesHandler.PROFILE, PROFILES);
     }
 
-    private List<Profile> mAvailableProfiles;
 
     @Override
     public boolean onCreate() {
-        SharedPreferences mPeferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        try {
-            mAvailableProfiles = ProfilesHandler.INSTANCE.getProfilesFromPreferences(mPeferences);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         return true; // ContentProvider successfully created
     }
 
@@ -55,7 +49,13 @@ public class ProfilesContentProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection,
                         String selection, String[] selectionArgs, String sortOrder) {
-
+        SharedPreferences mPeferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        List<Profile> mAvailableProfiles = new ArrayList<>();
+        try {
+            mAvailableProfiles = ProfilesHandler.INSTANCE.getProfilesFromPreferences(mPeferences);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         MatrixCursor mc = new MatrixCursor(ProfilesHandler.CONTENT_PROVIDER_FIELDS);
 
         switch (uriMatcher.match(uri)) {
