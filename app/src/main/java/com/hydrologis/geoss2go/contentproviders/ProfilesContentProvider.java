@@ -64,7 +64,7 @@ public class ProfilesContentProvider extends ContentProvider {
                 try {
                     int idInt = Integer.parseInt(id);
                     Profile profile = mAvailableProfiles.get(idInt);
-                    mc.addRow(new Object[]{profile.name, profile.active, ProfilesHandler.INSTANCE.getJsonFromProfile(profile).toString(2)});
+                    mc.addRow(new Object[]{profile.name, profile.active ? 1 : 0, ProfilesHandler.INSTANCE.getJsonFromProfile(profile).toString(2)});
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -72,7 +72,7 @@ public class ProfilesContentProvider extends ContentProvider {
             case PROFILES: // all profiles will be selected
                 try {
                     for (Profile profile : mAvailableProfiles) {
-                        mc.addRow(new Object[]{profile.name, profile.active, ProfilesHandler.INSTANCE.getJsonFromProfile(profile).toString(2)});
+                        mc.addRow(new Object[]{profile.name, profile.active ? 1 : 0, ProfilesHandler.INSTANCE.getJsonFromProfile(profile).toString(2)});
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

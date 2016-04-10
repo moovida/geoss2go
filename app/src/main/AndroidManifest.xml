@@ -48,7 +48,7 @@
             android:name=".contentproviders.ProfilesContentProvider"
             android:authorities="eu.geopaparazzi.provider.profiles"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="true" />
     </application>
 
 </manifest>
