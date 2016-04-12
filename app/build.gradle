@@ -4,19 +4,55 @@ android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
 
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            applicationVariants.all { variant ->
+                variant.outputs.each { output ->
+                    def file = output.outputFile
+                    def fileName = file.name.replace("app-release.apk", "geoss2go_" + android.defaultConfig.versionName + ".apk");
+                    output.outputFile = new File(file.parentFile, fileName)
+                }
+            }
+        }
+        debug {
+            debuggable true
+        }
+    }
+
+    signingConfigs {
+        config {
+            def Properties props = new Properties()
+            def propFile = new File('ant.properties')
+            if (propFile.canRead()) {
+                props.load(new FileInputStream(propFile))
+                if (props != null && props.containsKey('key.store') && props.containsKey('key.store.password') &&
+                        props.containsKey('key.alias') && props.containsKey('key.alias.password')) {
+                    storeFile = file(props['key.store'])
+                    storePassword = props['key.store.password']
+                    keyAlias = props['key.alias']
+                    keyPassword = props['key.alias.password']
+                } else {
+                    println 'ant.properties found but some entries are missing'
+                    android.buildTypes.release.signingConfig = null
+                }
+            } else {
+                println 'ant.properties not found'
+                android.buildTypes.release.signingConfig = null
+            }
+        }
+    }
+
     defaultConfig {
         applicationId "com.hydrologis.geoss2go"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.1"
+        signingConfig signingConfigs.config
     }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
+
 }
 
 dependencies {
