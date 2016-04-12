@@ -279,14 +279,24 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
     private void importProfiles() {
         try {
             ResourcesManager resourcesManager = ResourcesManager.getInstance(this);
+            File sdcardDir = resourcesManager.getSdcardDir();
             File applicationSupporterDir = resourcesManager.getApplicationSupporterDir();
             File inputFile = new File(applicationSupporterDir, PROFILES_CONFIG_JSON);
             if (inputFile.exists()) {
                 String profilesJson = FileUtilities.readfile(inputFile);
                 List<Profile> importedProfiles = ProfilesHandler.INSTANCE.getProfilesFromJson(profilesJson);
+
+                // substitute sdcard. In case it was exported from another device
+                for (Profile profile : importedProfiles) {
+                    profile.correctPaths(sdcardDir.getAbsolutePath());
+                }
+
+
                 profileList.addAll(importedProfiles);
                 saveProfiles();
                 loadProfiles();
+
+                GPDialogs.quickInfo(profilesContainer, "Profiles properly imported.");
             } else {
                 GPDialogs.warningDialog(this, "No profiles file exist in the path: " + inputFile.getAbsolutePath(), null);
             }
@@ -303,6 +313,7 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
             File outFile = new File(applicationSupporterDir, PROFILES_CONFIG_JSON);
             String jsonFromProfiles = ProfilesHandler.INSTANCE.getJsonFromProfilesList(profileList, true);
             FileUtilities.writefile(jsonFromProfiles, outFile);
+            GPDialogs.quickInfo(profilesContainer, "Profiles exported to: " + outFile);
         } catch (Exception e) {
             GPDialogs.warningDialog(this, "An error occurred: " + e.getLocalizedMessage(), null);
             Log.e("GEOS2GO", "", e);
@@ -315,6 +326,11 @@ public class Geoss2GoActivity extends AppCompatActivity implements NewProfileDia
         p.name = name;
         p.description = description;
         p.creationdate = TimeUtilities.INSTANCE.TIME_FORMATTER_LOCAL.format(new Date());
+        try {
+            p.sdcardPath = ResourcesManager.getInstance(this).getSdcardDir().getAbsolutePath();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         profileList.add(p);
         loadProfiles();
     }
