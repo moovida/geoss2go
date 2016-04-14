@@ -1,0 +1,50 @@
+{
+  "profiles": [
+    {
+      "name": "profile name 1",
+      "description": "profile description 1",
+      "creationdate": "2012-02-12 00:00",
+      "author": "Andrea",
+      "basemaps": [
+        {
+          "path": "/sdcard/italy.map"
+        },
+        {
+          "path": "/sdcard/mapnik.mapurl"
+        }
+      ],
+      "spatialitedatabases": [
+        {
+          "path": "/sdcard/italy.sqlite"
+        },
+        {
+          "path": "/sdcard/bolzano.sqlite"
+        }
+      ],
+      "forms": "/sdcard/tags.json"
+    },
+    {
+      "name": "profile name 2",
+      "description": "profile description 1",
+      "creationdate": "2012-02-12 00:00",
+      "author": "Andrea",
+      "basemaps": [
+        {
+          "path": "/sdcard/italy.map"
+        },
+        {
+          "path": "/sdcard/mapnik.mapurl"
+        }
+      ],
+      "spatialitedatabases": [
+        {
+          "path": "/sdcard/italy.sqlite"
+        },
+        {
+          "path": "/sdcard/bolzano.sqlite"
+        }
+      ],
+      "forms": "/sdcard/tags.json"
+    }
+  ]
+}

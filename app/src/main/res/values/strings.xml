@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Geoss2Go</string>
+    <string name="license_text">
+        <![CDATA[
+        <p>This application has been developed within the
+        <b>MyGEOSS project</b> , which has received funding from the
+        <b>European Union’s Horizon 2020</b> research and innovation programme.</p>
+
+        <p>To unleash the power of this app you need to install also
+        the digital field mapping app Geopaparazzi. To do so,
+        <a href="https://play.google.com/store/apps/details?id=eu.hydrologis.geopaparazzi">
+        click here</a>.</p>
+
+        <p>To create a new profile simply <b>push the plus button</b> on the upper right corner.</p>
+        ]]>
+    </string>
+    <string name="action_settings">Settings</string>
+    <string name="action_import">Import Profiles</string>
+    <string name="action_export">Export profiles</string>
+    <string name="action_delete">Delete all Profiles</string>
+    <string name="title_activity_profile_settings">Profile Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="deactivate_profile">Deactivate profile</string>
+    <string name="activate_profile">Activate profile</string>
+</resources>

@@ -1,0 +1,5 @@
+include ':app'
+include ':geopaparazzispatialitelibrary'
+project(':geopaparazzispatialitelibrary').projectDir=new File('../geopaparazzi6-git/geopaparazzilibrary/')
+include ':wms_nww'
+project(':wms_nww').projectDir=new File('../wms_nww/')
