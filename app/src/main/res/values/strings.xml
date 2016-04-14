@@ -2,6 +2,9 @@
     <string name="app_name">Geoss2Go</string>
     <string name="license_text">
         <![CDATA[
+        <p>This is Geoss2Go. For more information, visit the
+        <a href="http://moovida.github.io/geoss2go/">homepage</a>.
+
         <p>This application has been developed within the
         <b>MyGEOSS project</b> , which has received funding from the
         <b>European Union’s Horizon 2020</b> research and innovation programme.</p>
@@ -12,6 +15,10 @@
         click here</a>.</p>
 
         <p>To create a new profile simply <b>push the plus button</b> on the upper right corner.</p>
+
+        <p>For a complete tutorial about the usage of Geoss2Go
+        <a href="https://github.com/moovida/geoss2go/wiki/How-to-use-Geoss2Go">
+        visit this page</a>.</p>
         ]]>
     </string>
     <string name="action_settings">Settings</string>
