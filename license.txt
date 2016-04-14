@@ -1,0 +1,3 @@
+All the code inside this repository is released under the European Union Public Licence (EUPL v.1.1).
+
+Information about the EUPL are available here: https://joinup.ec.europa.eu/community/eupl/og_page/eupl
